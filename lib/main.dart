@@ -1,7 +1,7 @@
 import 'package:Sample/constants.dart';
 import 'package:Sample/details_screen.dart';
 import 'package:Sample/model/category.dart';
-import 'package:Sample/model/categoryImage.dart';
+import 'package:Sample/login_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 //import 'package:Sample/model/DashboardCategory.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sample App',
       theme: ThemeData(),
-      home: HomeScreen(),
+      home: LoginPage(),
     );
   }
 }
