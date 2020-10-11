@@ -27,6 +27,7 @@ class _State extends State<StoreData> {
     // print("Har Har Mahadev");
     final fb = FirebaseDatabase.instance
         .reference()
+		.child(Subjects)
         .child(Course)
         .child("Lecture List");
 
