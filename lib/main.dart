@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sample App',
       theme: ThemeData(),
-      home: LoginPage(),
+      home: HomeScreen(),
     );
   }
 }
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   List<Category> Categories = [];
   void initState() {
     // print("Har Har Mahadev");
-    final fb = FirebaseDatabase.instance.reference();
+    final fb = FirebaseDatabase.instance.reference().child("Subjects");
     // DatabaseReference ref = FirebaseDatabase.instance.reference();
     // ref.child('Computer Network').once().then((DataSnapshot snap) {
     //   var Lecture = snap.value.keys;
