@@ -76,20 +76,20 @@ class _State extends State<StoreData> {
                     ],
                   ),
                   SizedBox(height: 30),
-                  ClipPath(
-                    clipper: BestSellerClipper(),
-                    child: Container(
-                      color: kBestSellerColor,
-                      padding: EdgeInsets.only(
-                          left: 10, top: 5, right: 20, bottom: 5),
-                      child: Text(
-                        "10k Students Enrolled...".toUpperCase(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // ClipPath(
+                  //   clipper: BestSellerClipper(),
+                  //   child: Container(
+                  //     color: kBestSellerColor,
+                  //     padding: EdgeInsets.only(
+                  //         left: 10, top: 5, right: 20, bottom: 5),
+                  //     child: Text(
+                  //       "10k Students Enrolled...".toUpperCase(),
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.w600,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 16),
                   Text("AWS", style: kHeadingextStyle),
                   SizedBox(height: 16),
@@ -163,55 +163,6 @@ class _State extends State<StoreData> {
             //   ),
             //   child: Column(
             //     children: <Widget>[
-            Positioned(
-              // right: 0,
-              // left: 0,
-              // bottom: 0,
-              child: Container(
-                padding: EdgeInsets.all(20),
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 4),
-                      blurRadius: 50,
-                      color: kTextColor.withOpacity(.1),
-                    ),
-                  ],
-                ),
-                child: FlatButton(
-                  onPressed: () {},
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: kBlueColor,
-                          ),
-                          child: Text(
-                            "Enroll Now",
-                            style: kSubtitleTextSyule.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            //  ],
-            //  ),
-            //  ),
             // )
           ],
         ),
@@ -220,9 +171,9 @@ class _State extends State<StoreData> {
   }
 }
 
-class DetailsScreen extends StatelessWidget {
+class Dashboard_Details extends StatelessWidget {
   String Course_name;
-  DetailsScreen(Name) {
+  Dashboard_Details(Name) {
     this.Course_name = Name;
   }
   @override
@@ -292,24 +243,5 @@ class CourseContent extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class BestSellerClipper extends CustomClipper<Path> {
-  @override
-  getClip(Size size) {
-    var path = Path();
-    path.lineTo(size.width - 20, 0);
-    path.lineTo(size.width, size.height / 2);
-    path.lineTo(size.width - 20, size.height);
-    path.lineTo(0, size.height);
-    path.lineTo(0, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper oldClipper) {
-    return false;
   }
 }

@@ -1,11 +1,39 @@
 import 'package:Sample/constants.dart';
-import 'package:Sample/details_screen.dart';
+import 'Dashboarad_Details.dart';
 import 'package:Sample/model/DashboardCategory.dart';
 import 'package:flutter/material.dart';
+import 'package:Sample/model/category.dart';
+import 'package:Sample/LecturesList.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 
-class Dashboard extends StatelessWidget {
+class Dash extends StatefulWidget {
+  @override
+  _DashState createState() => _DashState();
+}
+
+class _DashState extends State<Dash> {
+  List<Category> Categories = [];
+  void initState() {
+    // print("Har Har Mahadev");
+    final fb =
+        FirebaseDatabase.instance.reference().child("Students").child("abcd");
+
+    fb.once().then((DataSnapshot snap) {
+      print(snap);
+      var data = snap.value;
+      // var lecture = snap.value.keys;
+      print(data);
+      Categories.clear();
+
+      data.forEach((key, value) {
+        Categories.add(new Category(key, value['image']));
+      });
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +58,7 @@ class Dashboard extends StatelessWidget {
               child: StaggeredGridView.countBuilder(
                 padding: EdgeInsets.all(0),
                 crossAxisCount: 2,
-                itemCount: categoriesDash.length,
+                itemCount: Categories.length,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 itemBuilder: (context, index) {
@@ -42,7 +70,7 @@ class Dashboard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                DetailsScreen(categoriesDash[index].name)),
+                                Dashboard_Details(Categories[index].name)),
                       );
                     },
                     child: Column(
@@ -53,7 +81,7 @@ class Dashboard extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             image: DecorationImage(
-                              image: AssetImage(categoriesDash[index].image),
+                              image: NetworkImage(Categories[index].image),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -62,7 +90,7 @@ class Dashboard extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              categoriesDash[index].name,
+                              Categories[index].name,
                               style: kTitleTextStyle,
                             ),
                           ),
@@ -84,5 +112,12 @@ class Dashboard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class Dashboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dash();
   }
 }
