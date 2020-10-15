@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:Sample/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Dashboarad_Details.dart';
@@ -31,28 +33,27 @@ class _DashState extends State<Dash> {
       //print('User ID:  '+UserId);
 
       //print(uemail);
+      final fb =
+          FirebaseDatabase.instance.reference().child("Students").child(UserId);
+
+      fb.once().then((DataSnapshot snap) {
+        print(snap);
+        var data = snap.value;
+        // var lecture = snap.value.keys;
+        print(data);
+        Categories.clear();
+
+        data.forEach((key, value) {
+          Categories.add(new Category(value['Course'], value['image']));
+        });
+        setState(() {});
+      });
     }
 
     getCurrentUser();
     print(UserId);
 
-    final fb = FirebaseDatabase.instance
-        .reference()
-        .child("Students")
-        .child("cQCZD8DyC3hQ3t7PWr7qVqBIzQ63");
-
-    fb.once().then((DataSnapshot snap) {
-      print(snap);
-      var data = snap.value;
-      // var lecture = snap.value.keys;
-      print(data);
-      Categories.clear();
-
-      data.forEach((key, value) {
-        Categories.add(new Category(value['Course'], value['image']));
-      });
-      setState(() {});
-    });
+    // List<Category> result = LinkedHashSet<String>.from(Categories).toList();
   }
 
   @override

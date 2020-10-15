@@ -32,13 +32,15 @@ class _State extends State<StoreData> {
     UserId = uid;
     //Useremail = uemail;
     //print('User ID:  '+UserId);
-
+    print("Updated");
     //print(uemail);
   }
 
   final fb = FirebaseDatabase.instance.reference().child("Students");
+//final check = FirebaseDatabase.instance.reference().child("Students").child(UserId);
   List<LectureList> ListofLinks = [];
   String Course;
+  int check = 0;
   String image;
   _State(course_name, Image) {
     this.Course = course_name;
@@ -47,6 +49,7 @@ class _State extends State<StoreData> {
   @override
   void initState() {
     // print("Har Har Mahadev");
+
     final fb = FirebaseDatabase.instance
         .reference()
         .child("Subjects")
@@ -55,19 +58,21 @@ class _State extends State<StoreData> {
 
     getCurrentUser();
 
+    print(UserId);
     fb.once().then((DataSnapshot snap) {
-      print(snap);
+      // print(snap);
       int index = 0;
       String No_of_course;
       var data = snap.value;
       // var lecture = snap.value.keys;
-      print(data);
+      // print(data);
       ListofLinks.clear();
 
       data.forEach((key, value) {
         index = index + 1;
         No_of_course = (index < 9) ? "0" + "$index" : "$index";
-        ListofLinks.add(new LectureList(No_of_course, value['link'], key));
+        String Name = "Preview " + No_of_course;
+        ListofLinks.add(new LectureList(No_of_course, value['link'], Name));
       });
       setState(() {});
     });
@@ -134,7 +139,7 @@ class _State extends State<StoreData> {
 
                   // _State stat =  new _State(),
 
-                  itemCount: ListofLinks.length,
+                  itemCount: (ListofLinks.length < 5) ? ListofLinks.length : 5,
                   // crossAxisSpacing: 20,
                   // mainAxisSpacing: 20,
                   itemBuilder: (context, index) {
@@ -208,11 +213,37 @@ class _State extends State<StoreData> {
                 ),
                 child: FlatButton(
                   onPressed: () {
-                    fb
-                        .child(UserId)
-                        .push()
-                        .set({"Course": Course, "image": image}).then((value) {
-                      print(UserId);
+                    //  int check = 0;
+                    final Check = FirebaseDatabase.instance
+                        .reference()
+                        .child("Students")
+                        .child(UserId);
+                    print(UserId);
+                    Check.once().then((DataSnapshot snap1) {
+                      var data1 = snap1.value;
+                      print(data1);
+                      if (data1 == true) {
+                        fb.child(UserId).push().set(
+                            {"Course": Course, "image": image}).then((value) {
+                          print("UserId");
+                        });
+                      }
+
+                      data1.forEach((key, value) {
+                        // Categories.add(new Category(value['Course'], value['image']));
+                        if (value['Course'] == Course) {
+                          check = 1;
+                          print("Har Har Mahadev");
+                          check = check + 1;
+                        }
+                      });
+                      if (check == 0) {
+                        print(check);
+                        fb.child(UserId).push().set(
+                            {"Course": Course, "image": image}).then((value) {
+                          print("UserId");
+                        });
+                      }
                     });
                   },
                   child: Row(

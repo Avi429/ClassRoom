@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
       print(snap);
       var data = snap.value;
       // var lecture = snap.value.keys;
-      print(data);
+      // print(data);
       Categories.clear();
 
       data.forEach((key, value) {
