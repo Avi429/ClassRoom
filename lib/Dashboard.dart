@@ -1,4 +1,5 @@
 import 'package:Sample/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'Dashboarad_Details.dart';
 import 'package:Sample/model/DashboardCategory.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,29 @@ class Dash extends StatefulWidget {
 class _DashState extends State<Dash> {
   List<Category> Categories = [];
   void initState() {
-    // print("Har Har Mahadev");
-    final fb =
-        FirebaseDatabase.instance.reference().child("Students").child("abcd");
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    String UserId = '';
+    //String image =
+    //  'https://firebasestorage.googleapis.com/v0/b/fir-demo-46019.appspot.com/o/Images%2Fcomputer_networking.jpg?alt=media&token=f5263185-fdba-4241-b701-8a013b4cfae3';
+    void getCurrentUser() async {
+      final FirebaseUser user = await auth.currentUser();
+      final uid = user.uid;
+      // Similarly we can get email as well
+      //final uemail = user.email;
+      UserId = uid;
+      //Useremail = uemail;
+      //print('User ID:  '+UserId);
+
+      //print(uemail);
+    }
+
+    getCurrentUser();
+    print(UserId);
+
+    final fb = FirebaseDatabase.instance
+        .reference()
+        .child("Students")
+        .child("cQCZD8DyC3hQ3t7PWr7qVqBIzQ63");
 
     fb.once().then((DataSnapshot snap) {
       print(snap);
@@ -28,7 +49,7 @@ class _DashState extends State<Dash> {
       Categories.clear();
 
       data.forEach((key, value) {
-        Categories.add(new Category(key, value['image']));
+        Categories.add(new Category(value['Course'], value['image']));
       });
       setState(() {});
     });

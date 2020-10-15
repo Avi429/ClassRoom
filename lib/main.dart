@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sample App',
       theme: ThemeData(),
-      home: HomeScreen(),
+      home: LoginPage(),
     );
   }
 }
@@ -184,8 +184,9 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                DetailsScreen(Categories[index].name)),
+                            builder: (context) => DetailsScreen(
+                                Categories[index].name,
+                                Categories[index].image)),
                       );
                     },
                     child: Column(

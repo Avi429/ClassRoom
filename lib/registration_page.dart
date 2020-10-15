@@ -3,6 +3,7 @@ import 'package:Sample/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final fb = FirebaseDatabase.instance.reference().child("Students");
   String errorMessage = '';
   String successMessage = '';
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
@@ -203,10 +205,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   Future<FirebaseUser> signUp(email, password) async {
+    //fb.child(_emailId).set(true).then((value){print("Done");});
     try {
       FirebaseUser user = (await auth.createUserWithEmailAndPassword(
               email: email, password: password))
           .user;
+      //String userid =user.uid;
+      fb.child(user.uid).set(true).then((value){print("Done");});
       assert(user != null);
       assert(await user.getIdToken() != null);
       return user;

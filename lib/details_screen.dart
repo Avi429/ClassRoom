@@ -1,4 +1,5 @@
 import 'package:Sample/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:Sample/main.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +9,40 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class StoreData extends StatefulWidget {
   String Course;
-  StoreData(String course_name) {
+  String image;
+  StoreData(String course_name, String course_image) {
     this.Course = course_name;
+    this.image = course_image;
   }
 
   @override
-  _State createState() => _State(Course);
+  _State createState() => _State(Course, image);
 }
 
 class _State extends State<StoreData> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String UserId = '';
+  // String image =
+  //   'https://firebasestorage.googleapis.com/v0/b/fir-demo-46019.appspot.com/o/Images%2Fcomputer_networking.jpg?alt=media&token=f5263185-fdba-4241-b701-8a013b4cfae3';
+  getCurrentUser() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    // Similarly we can get email as well
+    //final uemail = user.email;
+    UserId = uid;
+    //Useremail = uemail;
+    //print('User ID:  '+UserId);
+
+    //print(uemail);
+  }
+
+  final fb = FirebaseDatabase.instance.reference().child("Students");
   List<LectureList> ListofLinks = [];
   String Course;
-  _State(course_name) {
+  String image;
+  _State(course_name, Image) {
     this.Course = course_name;
+    this.image = Image;
   }
   @override
   void initState() {
@@ -30,6 +52,8 @@ class _State extends State<StoreData> {
         .child("Subjects")
         .child(Course)
         .child("Lecture List");
+
+    getCurrentUser();
 
     fb.once().then((DataSnapshot snap) {
       print(snap);
@@ -91,7 +115,7 @@ class _State extends State<StoreData> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  Text("AWS", style: kHeadingextStyle),
+                  Text(Course, style: kHeadingextStyle),
                   SizedBox(height: 16),
                   SizedBox(height: 20),
                 ],
@@ -183,7 +207,14 @@ class _State extends State<StoreData> {
                   ],
                 ),
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    fb
+                        .child(UserId)
+                        .push()
+                        .set({"Course": Course, "image": image}).then((value) {
+                      print(UserId);
+                    });
+                  },
                   child: Row(
                     children: <Widget>[
                       SizedBox(width: 20),
@@ -222,12 +253,14 @@ class _State extends State<StoreData> {
 
 class DetailsScreen extends StatelessWidget {
   String Course_name;
-  DetailsScreen(Name) {
+  String Course_image;
+  DetailsScreen(Name, Image) {
     this.Course_name = Name;
+    this.Course_image = Image;
   }
   @override
   Widget build(BuildContext context) {
-    return StoreData(Course_name);
+    return StoreData(Course_name, Course_image);
   }
 }
 

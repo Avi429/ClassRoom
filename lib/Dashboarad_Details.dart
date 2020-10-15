@@ -91,7 +91,7 @@ class _State extends State<StoreData> {
                   //   ),
                   // ),
                   SizedBox(height: 16),
-                  Text("AWS", style: kHeadingextStyle),
+                  Text(Course, style: kHeadingextStyle),
                   SizedBox(height: 16),
                   SizedBox(height: 20),
                 ],
