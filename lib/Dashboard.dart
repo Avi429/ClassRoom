@@ -99,7 +99,7 @@ class _DashState extends State<Dash> {
                       children: <Widget>[
                         Container(
                           padding: EdgeInsets.all(20),
-                          height: index.isEven ? 200 : 240,
+                          height: 200,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             image: DecorationImage(
