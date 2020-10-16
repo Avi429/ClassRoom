@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -126,9 +127,13 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             if (_formStateKey.currentState.validate()) {
                               _formStateKey.currentState.save();
-                              signIn(_emailId, _password).then((user) {
+                              signIn(_emailId, _password).then((user) async {
                                 if (user != null) {
                                   print('Logged in successfully.');
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  prefs.setString('email', _emailId);
+                                  print(_emailId);
                                   setState(() {
                                     Navigator.pushReplacement(
                                       context,

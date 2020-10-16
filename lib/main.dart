@@ -1,7 +1,6 @@
 import 'package:Sample/constants.dart';
 import 'package:Sample/details_screen.dart';
 import 'package:Sample/model/category.dart';
-import 'package:Sample/login_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 //import 'package:Sample/model/DashboardCategory.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Sample/chewie_list_item.dart';
 import 'package:video_player/video_player.dart';
-import 'package:Sample/details_screen.dart';
+import 'package:Sample/SplashScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sample App',
       theme: ThemeData(),
-      home: LoginPage(),
+      home: SplashScreen(),
     );
   }
 }
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Charusat E-learn"),
+        title: Text("Moj Kr ne"),
       ),
       drawer: Drawer(
         child: ListView(
