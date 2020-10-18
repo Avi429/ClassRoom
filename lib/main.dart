@@ -1,6 +1,7 @@
 import 'package:Sample/constants.dart';
 import 'package:Sample/details_screen.dart';
 import 'package:Sample/model/category.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 //import 'package:Sample/model/DashboardCategory.dart';
@@ -8,8 +9,11 @@ import 'package:Sample/Dashboard.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Sample/chewie_list_item.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:video_player/video_player.dart';
 import 'package:Sample/SplashScreen.dart';
+import 'login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +28,24 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
     );
   }
+}
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+final GoogleSignIn googleSignIn = new GoogleSignIn();
+bool isGoogleSignIn = false;
+String errorMessage = '';
+String successMessage = '';
+
+Future<bool> _googleSignout() async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    await auth.signOut();
+    await googleSignIn.signOut();
+    return true;
+  } catch (e) {
+    print(e);
+  }
+  Get.off(LoginPage());
 }
 
 class HomePage extends StatefulWidget {
@@ -89,11 +111,15 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: Text('Logout'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Dashboard()),
-                );
-                //Navigator.pop(context);
+                _googleSignout().then((response) {
+                  if (response) {
+                    setState(() {
+                      isGoogleSignIn = false;
+                      successMessage = '';
+                    });
+                  }
+                });
+                Get.off(LoginPage());
               },
             ),
             //Text('Menu Item 1'),

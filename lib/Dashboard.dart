@@ -21,8 +21,7 @@ class _DashState extends State<Dash> {
   void initState() {
     final FirebaseAuth auth = FirebaseAuth.instance;
     String UserId = '';
-    //String image =
-    //  'https://firebasestorage.googleapis.com/v0/b/fir-demo-46019.appspot.com/o/Images%2Fcomputer_networking.jpg?alt=media&token=f5263185-fdba-4241-b701-8a013b4cfae3';
+    int Len = 0;
     void getCurrentUser() async {
       final FirebaseUser user = await auth.currentUser();
       final uid = user.uid;
@@ -46,6 +45,7 @@ class _DashState extends State<Dash> {
         data.forEach((key, value) {
           Categories.add(new Category(value['Course'], value['image']));
         });
+        Len = Categories.length;
         setState(() {});
       });
     }

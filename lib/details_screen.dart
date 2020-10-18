@@ -22,6 +22,7 @@ class StoreData extends StatefulWidget {
 class _State extends State<StoreData> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String UserId = '';
+  String Enroll = 'Enroll Now';
   // String image =
   //   'https://firebasestorage.googleapis.com/v0/b/fir-demo-46019.appspot.com/o/Images%2Fcomputer_networking.jpg?alt=media&token=f5263185-fdba-4241-b701-8a013b4cfae3';
   getCurrentUser() async {
@@ -226,6 +227,8 @@ class _State extends State<StoreData> {
                         fb.child(UserId).push().set(
                             {"Course": Course, "image": image}).then((value) {
                           print("UserId");
+                          Enroll =
+                              "You have Succesfully Enrolled to this course";
                         });
                       }
 
@@ -235,6 +238,7 @@ class _State extends State<StoreData> {
                           check = 1;
                           print("Har Har Mahadev");
                           check = check + 1;
+                          Enroll = "You have already Enrolled to this course";
                         }
                       });
                       if (check == 0) {
@@ -242,6 +246,8 @@ class _State extends State<StoreData> {
                         fb.child(UserId).push().set(
                             {"Course": Course, "image": image}).then((value) {
                           print("UserId");
+                          Enroll =
+                              "You have Succesfully Enrolled to this course";
                         });
                       }
                     });
@@ -258,7 +264,7 @@ class _State extends State<StoreData> {
                             color: kBlueColor,
                           ),
                           child: Text(
-                            "Enroll Now",
+                            Enroll,
                             style: kSubtitleTextSyule.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
