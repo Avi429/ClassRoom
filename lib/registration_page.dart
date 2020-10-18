@@ -18,6 +18,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   String _emailId;
   String _password;
+  final _firstnameController = TextEditingController(text: '');
+  final _lastnameController = TextEditingController(text: '');
   final _emailIdController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
   final _confirmPasswordController = TextEditingController(text: '');
@@ -25,183 +27,263 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Video App'),
-      ),
-      body: Center(
-        child: Center(
-          child: Column(
-            children: [
-              Card(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
+        appBar: AppBar(
+          title: Text('Charusat E-learn'),
+        ),
+        body: Padding(
+            padding: EdgeInsets.all(10),
+            child: ListView(
+              children: <Widget>[
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Charusat E-learn',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30),
+                    )),
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(fontSize: 20),
+                    )),
+                Form(
+                  key: _formStateKey,
+                  autovalidate: true,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Form(
-                        key: _formStateKey,
-                        autovalidate: true,
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 5),
-                              child: TextFormField(
-                                validator: validateEmail,
-                                onSaved: (value) {
-                                  _emailId = value;
-                                },
-                                keyboardType: TextInputType.emailAddress,
-                                controller: _emailIdController,
-                                decoration: InputDecoration(
-                                  focusedBorder: new UnderlineInputBorder(
-                                    borderSide: new BorderSide(
-                                        color: Colors.blue,
-                                        width: 2,
-                                        style: BorderStyle.solid),
-                                  ),
-                                  // hintText: "Company Name",
-                                  labelText: "Email Id",
-                                  icon: Icon(
-                                    Icons.email,
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _firstnameController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: new BorderSide(
                                     color: Colors.blue,
-                                  ),
-                                  fillColor: Colors.white,
-                                  labelStyle: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ),
+                                    width: 2,
+                                    style: BorderStyle.solid)),
+                            labelText: 'First Name',
+                            icon: Icon(
+                              Icons.textsms,
+                              color: Colors.blue,
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 5),
-                              child: TextFormField(
-                                validator: validatePassword,
-                                onSaved: (value) {
-                                  _password = value;
-                                },
-                                controller: _passwordController,
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  focusedBorder: new UnderlineInputBorder(
-                                      borderSide: new BorderSide(
-                                          color: Colors.blue,
-                                          width: 2,
-                                          style: BorderStyle.solid)),
-                                  // hintText: "Company Name",
-                                  labelText: "Password",
-                                  icon: Icon(
-                                    Icons.lock,
-                                    color: Colors.blue,
-                                  ),
-                                  fillColor: Colors.white,
-                                  labelStyle: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ),
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
+                              color: Colors.blue,
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 5),
-                              child: TextFormField(
-                                validator: validateConfirmPassword,
-                                controller: _confirmPasswordController,
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  focusedBorder: new UnderlineInputBorder(
-                                      borderSide: new BorderSide(
-                                          color: Colors.blue,
-                                          width: 2,
-                                          style: BorderStyle.solid)),
-                                  // hintText: "Company Name",
-                                  labelText: "Confirm Password",
-                                  icon: Icon(
-                                    Icons.lock,
-                                    color: Colors.blue,
-                                  ),
-                                  fillColor: Colors.white,
-                                  labelStyle: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                      (errorMessage != ''
-                          ? Text(
-                              errorMessage,
-                              style: TextStyle(color: Colors.red),
-                            )
-                          : Container()),
-                      ButtonTheme.bar(
-                        // make buttons use the appropriate styles for cards
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: Text(
-                                'Registration',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              onPressed: () {
-                                if (_formStateKey.currentState.validate()) {
-                                  _formStateKey.currentState.save();
-                                  signUp(_emailId, _password).then((user) {
-                                    if (user != null) {
-                                      print('Registered Successfully.');
-                                      setState(() {
-                                        successMessage =
-                                            'Registered Successfully.\nYou can now navigate to Login Page.';
-                                      });
-                                    } else {
-                                      print('Error while Login.');
-                                    }
-                                  });
-                                }
-                              },
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _lastnameController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: new BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
+                                    style: BorderStyle.solid)),
+                            labelText: 'Last Name',
+                            icon: Icon(
+                              Icons.textsms,
+                              color: Colors.blue,
                             ),
-                            FlatButton(
-                              child: Text(
-                                'Login',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  new MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
-                                  ),
-                                );
-                              },
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
+                              color: Colors.blue,
                             ),
-                          ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextFormField(
+                          validator: validateEmail,
+                          onSaved: (value) {
+                            _emailId = value;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _emailIdController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: new BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
+                                    style: BorderStyle.solid)),
+                            labelText: 'Email Id',
+                            icon: Icon(
+                              Icons.email,
+                              color: Colors.blue,
+                            ),
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: TextFormField(
+                          validator: validatePassword,
+                          onSaved: (value) {
+                            _password = value;
+                          },
+                          obscureText: true,
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: new BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
+                                    style: BorderStyle.solid)),
+                            labelText: 'Password',
+                            icon: Icon(
+                              Icons.lock,
+                              color: Colors.blue,
+                            ),
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: TextFormField(
+                          validator: validateConfirmPassword,
+                          obscureText: true,
+                          controller: _confirmPasswordController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: new BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
+                                    style: BorderStyle.solid)),
+                            labelText: ' Confirm Password',
+                            icon: Icon(
+                              Icons.lock,
+                              color: Colors.blue,
+                            ),
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              (successMessage != ''
-                  ? Text(
-                      successMessage,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 24, color: Colors.blue),
+                /*FlatButton(
+                  onPressed: (){
+                    //forgot password screen
+                  },
+                  textColor: Colors.blue,
+                  child: Text('Forgot Password'),
+                ),*/
+                (errorMessage != ''
+                    ? Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Container()),
+                Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text('Register'),
+                      onPressed: () {
+                        //print(_emailIdController.text);
+                        // print(_passwordController.text);
+                        if (_formStateKey.currentState.validate()) {
+                          _formStateKey.currentState.save();
+                          signUp(_emailId, _password).then((user) {
+                            if (user != null) {
+                              print('Registered Successfully.');
+                              setState(() {
+                                successMessage =
+                                    'Registered Successfully.\nYou can now navigate to Login Page.';
+                              });
+                            } else {
+                              print('Error while Login.');
+                            }
+                          });
+                        }
+                      },
+                    )),
+                (successMessage != ''
+                    ? Text(
+                        successMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18, color: Colors.blue),
+                      )
+                    : Container()),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Divider(
+                            thickness: 1,
+                          ),
+                        ),
+                      ),
+                      Text('or'),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Divider(
+                            thickness: 1,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                    child: Row(
+                  children: <Widget>[
+                    Text('Already have an account?'),
+                    FlatButton(
+                      textColor: Colors.blue,
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ),
+                        );
+                        //signup screen
+                      },
                     )
-                  : Container()),
-            ],
-          ),
-        ),
-      ),
-    );
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                )),
+              ],
+            )));
   }
 
   Future<FirebaseUser> signUp(email, password) async {
@@ -211,7 +293,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               email: email, password: password))
           .user;
       //String userid =user.uid;
-      fb.child(user.uid).set(true).then((value){print("Done");});
+      fb.child(user.uid).set(true).then((value) {
+        print("Done");
+      });
       assert(user != null);
       assert(await user.getIdToken() != null);
       return user;

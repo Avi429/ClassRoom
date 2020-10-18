@@ -5,7 +5,6 @@ import 'package:Sample/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,191 +28,229 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Video App'),
-      ),
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Card(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Form(
-                    key: _formStateKey,
-                    autovalidate: true,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 10, right: 10, bottom: 5),
-                          child: TextFormField(
-                            validator: validateEmail,
-                            onSaved: (value) {
-                              _emailId = value;
-                            },
-                            keyboardType: TextInputType.emailAddress,
-                            controller: _emailIdController,
-                            decoration: InputDecoration(
-                              focusedBorder: new UnderlineInputBorder(
+        appBar: AppBar(
+          title: Text('Charusat E-learn'),
+        ),
+        body: Padding(
+            padding: EdgeInsets.all(10),
+            child: ListView(
+              children: <Widget>[
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Charusat E-learn',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30),
+                    )),
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Sign in',
+                      style: TextStyle(fontSize: 20),
+                    )),
+                Form(
+                  key: _formStateKey,
+                  autovalidate: true,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: TextFormField(
+                          validator: validateEmail,
+                          onSaved: (value) {
+                            _emailId = value;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _emailIdController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
                                 borderSide: new BorderSide(
                                     color: Colors.blue,
                                     width: 2,
-                                    style: BorderStyle.solid),
-                              ),
-                              labelText: "Email Id",
-                              icon: Icon(
-                                Icons.email,
-                                color: Colors.blue,
-                              ),
-                              fillColor: Colors.white,
-                              labelStyle: TextStyle(
-                                color: Colors.blue,
-                              ),
+                                    style: BorderStyle.solid)),
+                            labelText: 'Email Id',
+                            icon: Icon(
+                              Icons.email,
+                              color: Colors.blue,
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 10, right: 10, bottom: 5),
-                          child: TextFormField(
-                            validator: validatePassword,
-                            onSaved: (value) {
-                              _password = value;
-                            },
-                            controller: _passwordController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              focusedBorder: new UnderlineInputBorder(
-                                  borderSide: new BorderSide(
-                                      color: Colors.blue,
-                                      width: 2,
-                                      style: BorderStyle.solid)),
-                              labelText: "Password",
-                              icon: Icon(
-                                Icons.lock,
-                                color: Colors.blue,
-                              ),
-                              fillColor: Colors.white,
-                              labelStyle: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  (errorMessage != ''
-                      ? Text(
-                          errorMessage,
-                          style: TextStyle(color: Colors.red),
-                        )
-                      : Container()),
-                  ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                              fontSize: 18,
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
                               color: Colors.blue,
                             ),
                           ),
-                          onPressed: () {
-                            if (_formStateKey.currentState.validate()) {
-                              _formStateKey.currentState.save();
-                              signIn(_emailId, _password).then((user) async {
-                                if (user != null) {
-                                  print('Logged in successfully.');
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.setString('email', _emailId);
-                                  print(_emailId);
-                                  setState(() {
-                                    Get.to(HomeScreen());
-                                  });
-                                } else {
-                                  print('Error while Login.');
-                                }
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: TextFormField(
+                          validator: validatePassword,
+                          onSaved: (value) {
+                            _password = value;
+                          },
+                          obscureText: true,
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: new BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
+                                    style: BorderStyle.solid)),
+                            labelText: 'Password',
+                            icon: Icon(
+                              Icons.email,
+                              color: Colors.blue,
+                            ),
+                            fillColor: Colors.white,
+                            labelStyle: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                /*FlatButton(
+                  onPressed: (){
+                    //forgot password screen
+                  },
+                  textColor: Colors.blue,
+                  child: Text('Forgot Password'),
+                ),*/
+                (errorMessage != ''
+                    ? Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Container()),
+                Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text('Login'),
+                      onPressed: () {
+                        //print(_emailIdController.text);
+                        // print(_passwordController.text);
+                        if (_formStateKey.currentState.validate()) {
+                          _formStateKey.currentState.save();
+                          signIn(_emailId, _password).then((user) async {
+                            if (user != null) {
+                              print('Logged in successfully.');
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString('email', _emailId);
+                              print(_emailId);
+                              setState(() {
+                                Navigator.pushReplacement(
+                                  context,
+                                  new MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
                               });
+                            } else {
+                              print('Error while Login.');
                             }
-                          },
-                        ),
-                        FlatButton(
-                          child: Text(
-                            'Get Register',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.blue,
-                            ),
+                          });
+                        }
+                      },
+                    )),
+                (successMessage != ''
+                    ? Text(
+                        successMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18, color: Colors.blue),
+                      )
+                    : Container()),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Divider(
+                            thickness: 1,
                           ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              new MaterialPageRoute(
-                                builder: (context) => RegistrationPage(),
-                              ),
-                            );
-                          },
                         ),
-                      ],
-                    ),
+                      ),
+                      Text('or'),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Divider(
+                            thickness: 1,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ),
-          (successMessage != ''
-              ? Text(
-                  successMessage,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, color: Colors.blue),
-                )
-              : Container()),
-          (!isGoogleSignIn
-              ? RaisedButton(
-                  child: Text('Google Login'),
-                  onPressed: () {
-                    googleSignin(context).then((user) {
-                      if (user != null) {
-                        print('Logged in successfully.');
-                        setState(() {
-                          isGoogleSignIn = true;
-                          Navigator.pushReplacement(
-                            context,
-                            new MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
-                          );
+                ),
+                Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.orange,
+                      child: Text('Login via Google'),
+                      onPressed: () {
+                        //print(_emailIdController.text);
+                        // print(_passwordController.text);
+                        googleSignin(context).then((user) {
+                          if (user != null) {
+                            print('Logged in successfully.');
+                            setState(() {
+                              isGoogleSignIn = true;
+                              Navigator.pushReplacement(
+                                context,
+                                new MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                              );
+                            });
+                          } else {
+                            print('Error while Login.');
+                          }
                         });
-                      } else {
-                        print('Error while Login.');
-                      }
-                    });
-                  },
-                )
-              : RaisedButton(
-                  child: Text('Google Logout'),
-                  onPressed: () {
-                    googleSignout().then((response) {
-                      if (response) {
-                        setState(() {
-                          isGoogleSignIn = false;
-                          successMessage = '';
-                        });
-                      }
-                    });
-                  },
+                      },
+                    )),
+                Container(
+                    child: Row(
+                  children: <Widget>[
+                    Text('Does not have account?'),
+                    FlatButton(
+                      textColor: Colors.blue,
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                            builder: (context) => RegistrationPage(),
+                          ),
+                        );
+                        //signup screen
+                      },
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
                 )),
-        ],
-      )),
-    );
+              ],
+            )));
   }
 
   Future<FirebaseUser> signIn(String email, String password) async {
