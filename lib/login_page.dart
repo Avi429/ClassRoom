@@ -5,6 +5,7 @@ import 'package:Sample/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -147,12 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                               prefs.setString('email', _emailId);
                               print(_emailId);
                               setState(() {
-                                Navigator.pushReplacement(
-                                  context,
-                                  new MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                  ),
-                                );
+                                Get.off(HomeScreen());
                               });
                             } else {
                               print('Error while Login.');
