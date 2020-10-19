@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:Sample/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Dashboarad_Details.dart';
 import 'package:Sample/model/DashboardCategory.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:Sample/model/category.dart';
 import 'package:Sample/LecturesList.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 
 class Dash extends StatefulWidget {
   @override
@@ -18,20 +18,31 @@ class Dash extends StatefulWidget {
 
 class _DashState extends State<Dash> {
   List<Category> Categories = [];
+  String Username;
+  String User = " ";
   void initState() {
     final FirebaseAuth auth = FirebaseAuth.instance;
     String UserId = '';
     int Len = 0;
     void getCurrentUser() async {
       final FirebaseUser user = await auth.currentUser();
-      final uid = user.uid;
-      // Similarly we can get email as well
-      //final uemail = user.email;
-      UserId = uid;
-      //Useremail = uemail;
-      //print('User ID:  '+UserId);
+      String uid;
 
-      //print(uemail);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (user == null) {
+        print("Har Har Mahadev");
+        uid = prefs.getString('Uid');
+        print(uid);
+      } else {
+        print("Har Har Har Mahadev");
+        uid = user.uid;
+      }
+      UserId = uid;
+      Username = prefs.getString('UserName');
+      print(UserId);
+      print(Username);
+      User = "Welcome  Back " + Username + ",";
+
       final fb =
           FirebaseDatabase.instance.reference().child("Students").child(UserId);
 
@@ -41,10 +52,12 @@ class _DashState extends State<Dash> {
         // var lecture = snap.value.keys;
         print(data);
         Categories.clear();
+        if (data != true) {
+          data.forEach((key, value) {
+            Categories.add(new Category(value['Course'], value['image']));
+          });
+        }
 
-        data.forEach((key, value) {
-          Categories.add(new Category(value['Course'], value['image']));
-        });
         Len = Categories.length;
         setState(() {});
       });
@@ -72,7 +85,7 @@ class _DashState extends State<Dash> {
               ],
             ),
             SizedBox(height: 30),
-            Text("Welcome Back Avinash,", style: kHeadingextStyle),
+            Text(User, style: kHeadingextStyle),
             Text("Here is List of Courses You have enrolled...",
                 style: kSubheadingextStyle),
             SizedBox(height: 30),
@@ -117,12 +130,6 @@ class _DashState extends State<Dash> {
                             ),
                           ),
                         ),
-                        // Text(
-                        //   '${categories[index].Instructor}',
-                        //   style: TextStyle(
-                        //     color: kTextColor.withOpacity(.5),
-                        //   ),
-                        // )
                       ],
                     ),
                   );

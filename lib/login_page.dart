@@ -2,10 +2,10 @@ import 'package:Sample/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:Sample/registration_page.dart';
 import 'package:Sample/main.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -146,9 +146,20 @@ class _LoginPageState extends State<LoginPage> {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('email', _emailId);
+                              final FirebaseUser user =
+                                  await auth.currentUser();
+                              final uid = user.uid;
+                              prefs.setString('Uid', uid);
                               print(_emailId);
+                              print("Har Har Mahadev");
+                              print(uid);
                               setState(() {
-                                Get.off(HomeScreen());
+                                Navigator.pushReplacement(
+                                  context,
+                                  new MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
                               });
                             } else {
                               print('Error while Login.');
@@ -229,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                     FlatButton(
                       textColor: Colors.blue,
                       child: Text(
-                        'Sign in',
+                        'Sign UP',
                         style: TextStyle(fontSize: 20),
                       ),
                       onPressed: () {
@@ -269,6 +280,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<FirebaseUser> googleSignin(BuildContext context) async {
     FirebaseUser currentUser;
+    final fb = FirebaseDatabase.instance.reference().child("Students");
     try {
       final GoogleSignInAccount googleUser = await googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
@@ -287,7 +299,15 @@ class _LoginPageState extends State<LoginPage> {
 
       currentUser = await auth.currentUser();
       assert(user.uid == currentUser.uid);
+      fb.child(user.uid).set(true).then((value) {
+        print("Done");
+      });
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('UserName', "${currentUser.displayName}");
+      prefs.setString('Uid', user.uid);
+      prefs.setString('email', user.email);
       print(currentUser);
+
       print("User Name  : ${currentUser.displayName}");
     } catch (e) {
       handleError(e);

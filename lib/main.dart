@@ -4,13 +4,12 @@ import 'package:Sample/model/category.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-//import 'package:Sample/model/DashboardCategory.dart';
 import 'package:Sample/Dashboard.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Sample/chewie_list_item.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:Sample/SplashScreen.dart';
 import 'login_page.dart';
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Sample App',
       theme: ThemeData(),
@@ -41,8 +40,10 @@ Future<bool> _googleSignout() async {
     await FirebaseAuth.instance.signOut();
     await auth.signOut();
     await googleSignIn.signOut();
+    print("Har Har Har Mahadev");
     return true;
   } catch (e) {
+    print("Har Har Mahadev");
     print(e);
   }
   Get.off(LoginPage());
@@ -55,23 +56,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  String Username = "Avi";
+  String User = " ";
   List<Category> Categories = [];
   void initState() {
     // print("Har Har Mahadev");
     final fb = FirebaseDatabase.instance.reference().child("Subjects");
-    // DatabaseReference ref = FirebaseDatabase.instance.reference();
-    // ref.child('Computer Network').once().then((DataSnapshot snap) {
-    //   var Lecture = snap.value.keys;
-    //   var Link = snap.value;
-    //   // var i = 1;
-    //   for (var key in Lecture) {
-    //     ListofLinks.add(new LectureList("01", Link[key]['Link'], key));
-    //     // i = i + 1;
-    //   }
-    // });
-    fb.once().then((DataSnapshot snap) {
+
+    fb.once().then((DataSnapshot snap) async {
       print(snap);
       var data = snap.value;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      Username = prefs.getString('UserName');
       // var lecture = snap.value.keys;
       // print(data);
       Categories.clear();
@@ -79,6 +75,7 @@ class _HomePageState extends State<HomePage> {
       data.forEach((key, value) {
         Categories.add(new Category(key, value['image']));
       });
+      User = "Hey " + Username + ",";
       setState(() {});
     });
   }
@@ -86,7 +83,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Moj Kr ne"),
+        title: Text("Charusat E-learn"),
       ),
       drawer: Drawer(
         child: ListView(
@@ -132,16 +129,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: <Widget>[
-            //     //  SvgPicture.asset("icons/menu.svg")
-            //     //  Icon(Icons.menu),
-            //    // Image.asset("images/user.png"),
-            //   ],
-            // ),
-            // SizedBox(height: 30),
-            Text("Hey Avinash,", style: kHeadingextStyle),
+            Text(User, style: kHeadingextStyle),
             Text("Find a course you want to learn", style: kSubheadingextStyle),
             Container(
               margin: EdgeInsets.symmetric(vertical: 30),
@@ -154,13 +142,6 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Row(
                 children: <Widget>[
-                  //  SvgPicture.asset("icons/search.svg"),
-                  // IconButton(
-                  //     icon: Icon(Icons.search),
-                  //     onPressed: () {
-                  //       showSearch(context: context, delegate: SearchBar());
-                  //     }),
-                  // Icons.search;
                   FlatButton(
                     onPressed: () {
                       showSearch(context: context, delegate: SearchBar());
@@ -237,12 +218,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        // Text(
-                        //   '${categories[index].Instructor}',
-                        //   style: TextStyle(
-                        //     color: kTextColor.withOpacity(.5),
-                        //   ),
-                        // )
                       ],
                     ),
                   );

@@ -27,9 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("images/ux_design.png"), fit: BoxFit.cover),
-        ),
+            // image: DecorationImage(
+            //     image: AssetImage("images/ux_design.png"), fit: BoxFit.cover),
+            ),
       ),
     );
   }
@@ -43,7 +43,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void navigateUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String status = prefs.getString('email');
+    String uid = prefs.getString('Uid');
+    String Name = prefs.getString('UserName');
     print(status);
+    print(uid);
+    print(Name);
     if (status != null) {
       Navigator.pushReplacement(
         context,

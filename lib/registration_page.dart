@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   String _emailId;
   String _password;
+  String UserName;
   final _firstnameController = TextEditingController(text: '');
   final _lastnameController = TextEditingController(text: '');
   final _emailIdController = TextEditingController(text: '');
@@ -59,6 +61,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       Padding(
                         padding: EdgeInsets.all(10),
                         child: TextFormField(
+                          onSaved: (value) {
+                            UserName = value;
+                          },
                           keyboardType: TextInputType.text,
                           controller: _firstnameController,
                           decoration: InputDecoration(
@@ -208,8 +213,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         // print(_passwordController.text);
                         if (_formStateKey.currentState.validate()) {
                           _formStateKey.currentState.save();
-                          signUp(_emailId, _password).then((user) {
+                          signUp(_emailId, _password).then((user) async {
                             if (user != null) {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString('UserName', UserName);
                               print('Registered Successfully.');
                               setState(() {
                                 successMessage =
